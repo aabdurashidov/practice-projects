@@ -1,0 +1,8 @@
+version: '3'
+services:
+  scylla:
+    image: scylladb/scylla
+    ports:
+      - "9042:9042"
+    command: --entrypoint "/bin/sh"
+    entrypoint: [ "/bin/sh", "-c", "exec /docker-entrypoint.py scylla & sleep 10 && cqlsh -e \"CREATE KEYSPACE IF NOT EXISTS mykeyspace WITH replication = {'class': 'SimpleStrategy', 'replication_factor': 1};\" && wait" ]
