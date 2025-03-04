@@ -1,8 +1,23 @@
-version: '3'
+version: '3.8'
+
 services:
   scylla:
-    image: scylladb/scylla
+    image: scylladb/scylla:5.4.0
+    container_name: scylla
     ports:
       - "9042:9042"
-    command: --entrypoint "/bin/sh"
-    entrypoint: [ "/bin/sh", "-c", "exec /docker-entrypoint.py scylla & sleep 10 && cqlsh -e \"CREATE KEYSPACE IF NOT EXISTS mykeyspace WITH replication = {'class': 'SimpleStrategy', 'replication_factor': 1};\" && wait" ]
+      - "9160:9160"
+    environment:
+      - SCYLLA_CLUSTER_NAME=ProductCluster
+      - SCYLLA_ENDPOINT_SNITCH=SimpleSnitch
+    command: [
+      "--smp", "1",
+      "--memory", "750M",
+      "--overprovisioned", "1",
+      "--developer-mode", "1"
+    ]
+    healthcheck:
+      test: ["CMD-SHELL", "cqlsh -e 'DESCRIBE KEYSPACES'"]
+      interval: 5s
+      timeout: 10s
+      retries: 10

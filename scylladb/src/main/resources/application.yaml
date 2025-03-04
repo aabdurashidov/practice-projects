@@ -2,5 +2,13 @@ spring:
   cassandra:
     contact-points: localhost
     port: 9042
-    keyspace-name: mykeyspace
+    keyspace-name: product_db
+    schema-action: create_if_not_exists
     local-datacenter: datacenter1
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
