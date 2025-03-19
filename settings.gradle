@@ -1,4 +1,5 @@
 rootProject.name = 'practice-projects'
 
 include 'scylladb'
+include 'grpc'
 
